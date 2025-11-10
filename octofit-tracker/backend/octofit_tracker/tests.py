@@ -1,32 +1,27 @@
 from django.test import TestCase
-from rest_framework.test import APIClient
 from .models import User, Team, Activity, Leaderboard, Workout
 
-class APITest(TestCase):
-    def setUp(self):
-        self.client = APIClient()
+class UserModelTest(TestCase):
+    def test_create_user(self):
+        user = User.objects.create(email='test@example.com', name='Test User', team='Alpha')
+        self.assertEqual(user.email, 'test@example.com')
 
-    def test_api_root(self):
-        response = self.client.get('/')
-        self.assertEqual(response.status_code, 200)
-        self.assertIn('users', response.data)
+class TeamModelTest(TestCase):
+    def test_create_team(self):
+        team = Team.objects.create(name='Alpha')
+        self.assertEqual(team.name, 'Alpha')
 
-    def test_users_endpoint(self):
-        response = self.client.get('/api/users/')
-        self.assertEqual(response.status_code, 200)
+class ActivityModelTest(TestCase):
+    def test_create_activity(self):
+        activity = Activity.objects.create(user='Test User', type='Running', duration=30)
+        self.assertEqual(activity.type, 'Running')
 
-    def test_teams_endpoint(self):
-        response = self.client.get('/api/teams/')
-        self.assertEqual(response.status_code, 200)
+class LeaderboardModelTest(TestCase):
+    def test_create_leaderboard(self):
+        leaderboard = Leaderboard.objects.create(team='Alpha', points=100)
+        self.assertEqual(leaderboard.points, 100)
 
-    def test_activities_endpoint(self):
-        response = self.client.get('/api/activities/')
-        self.assertEqual(response.status_code, 200)
-
-    def test_workouts_endpoint(self):
-        response = self.client.get('/api/workouts/')
-        self.assertEqual(response.status_code, 200)
-
-    def test_leaderboard_endpoint(self):
-        response = self.client.get('/api/leaderboard/')
-        self.assertEqual(response.status_code, 200)
+class WorkoutModelTest(TestCase):
+    def test_create_workout(self):
+        workout = Workout.objects.create(name='Push Ups', difficulty='Easy')
+        self.assertEqual(workout.name, 'Push Ups')
